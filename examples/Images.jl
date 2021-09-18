@@ -1,36 +1,37 @@
 module Example
 
 using Glimmer, Glimmer.FlexUI
-using Colors
-using StaticArrays
-using GeometryBasics
 using Images, ImageSegmentation
 
 println("Start [$(splitext(basename(@__FILE__))[1])]")
 
+#---------------------------------------------------------------
+# define the application and some basic properties such as title and initial window size
+#---------------------------------------------------------------
 app = App()
 prop!(app, :title, "Glimmer Example - Images")
 prop!(app, :winInitWidth, 1200)
 prop!(app, :winInitHeight, 800)
 
-
 #---------------------------------------------------------------
-# Define Variables
+# Define the Variables we will be using in this example
 #---------------------------------------------------------------
 
+# image file name
 filename = addVariable!(app, Variable(name="filename", type="string",value="C:/t/TestImages/horse.jpg"))
+# size of segments
 size = addVariable!(app, Variable(name="size", type="int",value=10))
+# contains the result of the segmentation 
 details = addVariable!(app, Variable(name="details", type="string",value=10))
-
+# source and destination images
 src_image = addVariable!(app, Variable(name="src_image", type="image", value=""))
 dst_image = addVariable!(app, Variable(name="dst_image", type="image", value=""))
 
 #---------------------------------------------------------------
-# Define Controls
+# Define the UI Controls
 #---------------------------------------------------------------
-
 ui = VContainer(
-    H1Label("Segmantation Example"),
+    H1Label("Segmantation Example  []"),
     HContainer(
         Button(
             text="Load a file",
@@ -81,27 +82,32 @@ ui = VContainer(
             ]
         ),
     ),        
+    
+    Glimmer.exampleSourceAsCard(@__FILE__),     # add the source code of the example as the last control
 
 )
-FlexUI.controls!(app, ui)
+# set the controls for the application
+controls!(app, ui)
 
 #---------------------------------------------------------------
-# load the image at the start and on name change
+# utility function to load the current image from disk
 #---------------------------------------------------------------
-src_img = nothing
 function loadImage()
     @info "Loading Image [$(filename[])]"
     global src_img = load(filename[])
 end
 
+#---------------------------------------------------------------
+# define an event that will trigger when the vriable "filename" is changed
+#---------------------------------------------------------------
 on(filename) do val
     loadImage()
 end
 
-
 #---------------------------------------------------------------
-# the render function
+# the render function will be caulled when any of the UI controls changes value
 #---------------------------------------------------------------
+src_img = nothing
 function processImages()
     global src_img
 
@@ -112,15 +118,13 @@ function processImages()
     details[] = "$segments"
 end
 
-
 function render()
     processImages();
 end
 renderFunction!(app, render)
 
-
 #---------------------------------------------------------------
-# Run the application
+# load the code and the initial image and Run the application
 #---------------------------------------------------------------
 loadImage()
 run(app)

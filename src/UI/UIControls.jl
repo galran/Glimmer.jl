@@ -31,6 +31,7 @@ export  Container,
 
         CodeSnip,
         CodeSnipJulia,
+        RawHTML,
 
         VContainer,
         HContainer,
@@ -304,5 +305,16 @@ MDJulia(code) = Markdown(content = """```julia\n$(code)\n```""")
 end
 
 CodeSnipJulia(code) = CodeSnip(text=code, commandLine=true, prompt="julia>")
+
+
+@with_kw mutable struct RawHTML <: AbstractUIControl 
+    type::String = "raw-html"
+    html::String = ""
+    style::Any = "width: 100%; height: 400px;"
+    useFrame::Bool = false
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
+
 
 end # module UIControlsget

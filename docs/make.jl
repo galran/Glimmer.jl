@@ -14,10 +14,6 @@ makedocs(
     ],
     expandfirst = [])
 
-println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-println("@ SANITY CHECK")
-println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-
 # deploydocs(
 #     repo = "github.com/galran/Glimmer.jl.git",
 #     devbranch = "main",
