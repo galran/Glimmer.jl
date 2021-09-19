@@ -15,6 +15,7 @@ makedocs(
         "Examples" => [
             "Meshing Example" => "examples/Meshing.md",
         ],
+        "Reference" => "ref.md",
     ],
     expandfirst = [])
 

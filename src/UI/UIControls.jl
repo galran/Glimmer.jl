@@ -107,7 +107,21 @@ HContainer(args...) = Container(direction = "row", align="left center",  childre
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 
+"""
+    Slider Control
 
+Create a slider control.
+
+```julia
+    text::String = ""                   # text to apear to the left of the slider
+    trailing_text::String = ""          # text to apear to the right of the slider
+    min::Float64 = 0.0                  # minimum value
+    max::Float64 = 100.0                # maximum value
+    value::Float64 = 0                  # starting value (unused if connected to a variable)
+    step::Float64 = 1.0                 # tick change value
+    variable::Any = nothing             # variable
+```    
+"""
 @with_kw mutable struct Slider <: AbstractUIControl 
     type::String = "slider"
     text::String = ""
