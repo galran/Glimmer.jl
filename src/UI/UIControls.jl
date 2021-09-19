@@ -95,7 +95,7 @@ typedict(x) = Dict(fn=>getfield(x, fn) for fn ∈ filter(x->!startswith(string(x
 @with_kw mutable struct Container <: AbstractUIControl 
     type::String = "container"
     direction::String = "row"
-    gap::String = "10px"
+    gap::String = "20px"
     align::String = "left left"
     children::Vector{UIControls.AbstractUIControl} = []
 
@@ -105,6 +105,7 @@ end
 VContainer(args...) = Container(direction = "column", children=[args...])
 HContainer(args...) = Container(direction = "row", align="left center",  children=[args...])
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
+HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 
 
 @with_kw mutable struct Slider <: AbstractUIControl 
@@ -185,6 +186,7 @@ end
 
 @with_kw mutable struct Field <: AbstractUIControl 
     type::String = "field"
+    style::Any = ""
     input::String = "number"
     label::String = "default label"
     hint::String = "hint"

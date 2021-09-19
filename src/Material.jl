@@ -12,6 +12,9 @@ function Texture(path::String)
     data = open(read, path)
     return Texture(data)
 end
+function TextureData(data::Vector{UInt8})
+    return Texture(data)
+end
 
 #-----------------------------------------------------------------
 mutable struct Material <: AbstractMaterial

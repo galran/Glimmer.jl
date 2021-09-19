@@ -25,8 +25,16 @@ table_data = TableView.showtable(df, cell_changed = msg -> update_cell(df, msg))
 function update_cell(arr, msg)
     row = msg["row"] + 1 # zero-indexed in JS
     col = msg["col"]
-    @info arr[row, col] "->" msg["new"]
-    arr[row, col] = msg["new"]
+    try
+        arr[row, col] = msg["new"]
+    catch e
+        try
+            # try to convert the value string to the correct column type
+            arr[row, col] = parse(typeof(arr[row, col]), msg["new"])
+        catch e
+            @info "Problem in Updating the backend Dataframe [$e]"
+        end
+    end
 end
 
 #---------------------------------------------------------------

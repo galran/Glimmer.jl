@@ -18,7 +18,8 @@ prop!(app, :winInitHeight, 800)
 #---------------------------------------------------------------
 
 # image file name
-filename = addVariable!(app, Variable(name="filename", type="string",value="C:/t/TestImages/horse.jpg"))
+filename = addVariable!(app, Variable(name="filename", type="string",
+        value=abspath(joinpath(dirname(pathof(Glimmer)), "Data", "horse.jpg"))))
 # size of segments
 size = addVariable!(app, Variable(name="size", type="int",value=10))
 # contains the result of the segmentation 
@@ -31,7 +32,7 @@ dst_image = addVariable!(app, Variable(name="dst_image", type="image", value="")
 # Define the UI Controls
 #---------------------------------------------------------------
 ui = VContainer(
-    H1Label("Segmantation Example  []"),
+    H1Label("Segmantation Example"),
     HContainer(
         Button(
             text="Load a file",
@@ -124,7 +125,7 @@ end
 renderFunction!(app, render)
 
 #---------------------------------------------------------------
-# load the code and the initial image and Run the application
+# load the initial image and Run the application
 #---------------------------------------------------------------
 loadImage()
 run(app)

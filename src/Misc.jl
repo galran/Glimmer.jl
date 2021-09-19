@@ -16,7 +16,8 @@ export  AbstractScene,
         AbstractUIValidation,
         AbstractUIControl,
         renderHTML,
-        renderWGLMakieHTML
+        renderWGLMakieHTML,
+        identityTransform
 
 # place holders for function names        
 prop() = 0        

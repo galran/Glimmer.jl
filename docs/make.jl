@@ -11,6 +11,10 @@ makedocs(
     modules = [Glimmer],
     pages = [
         "Home" => "index.md",
+        "Overview" => "overview.md",
+        "Examples" => [
+            "Meshing Example" => "examples/Meshing.md",
+        ],
     ],
     expandfirst = [])
 

@@ -381,8 +381,8 @@ function render!(app::App)
     end
     app.__insideRender = true;
     try
-    # call the general update function
-    if (renderFunction(app) !== nothing)
+        # call the general update function
+        if (renderFunction(app) !== nothing)
             renderFunction(app)()
         end
     catch e
