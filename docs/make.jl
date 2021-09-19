@@ -11,12 +11,13 @@ makedocs(
     modules = [Glimmer],
     pages = [
         "Home" => "index.md",
+        "Overview" => "overview.md",
+        "Examples" => [
+            "Meshing Example" => "examples/Meshing.md",
+        ],
+        "Reference" => "ref.md",
     ],
     expandfirst = [])
-
-println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-println("@ SANITY CHECK")
-println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
 # deploydocs(
 #     repo = "github.com/galran/Glimmer.jl.git",

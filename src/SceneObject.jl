@@ -315,7 +315,7 @@ function render!(a::Axes)
     MeshCat.setobject!(arrow, material(mat))
     MeshCat.settransform!(arrow, point, vec, shaft_radius = shaft_scale)
 
-    MeshCat.settransform!(v, transform(local_tr(a)))
+    MeshCat.settransform!(v, local_tr(a))
 end
 #-----------------------------------------------------------------
 

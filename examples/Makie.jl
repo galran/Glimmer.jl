@@ -1,72 +1,66 @@
 module Example
 
 using Glimmer, Glimmer.FlexUI
-using Colors
-using StaticArrays
-using GeometryBasics
 import Makie, GLMakie
 
 println("Start [$(splitext(basename(@__FILE__))[1])]")
 
+#---------------------------------------------------------------
+# define the application and some basic properties such as title and initial window size
+#---------------------------------------------------------------
 app = App()
 prop!(app, :title, "Glimmer Example - Makie")
-
+prop!(app, :winInitWidth, 1200)
+prop!(app, :winInitHeight, 800)
 
 #---------------------------------------------------------------
 # Define Variables
 #---------------------------------------------------------------
-
 xscale = addVariable!(app, Variable(name="xscale", type="flota64",value=1))
 yscale = addVariable!(app, Variable(name="yscale", type="flota64",value=1))
 
-image = addVariable!(app, Variable(
-    name="image",
-    type="image",
-    value="", 
-))
+image = addVariable!(app, Variable(name="image", type="image", value="", ))
 
 #---------------------------------------------------------------
 # Define Controls
 #---------------------------------------------------------------
-
 ui = VContainer(
-    H1Label("Value Controls"),
-    Slider(
-        text="X Scale [1-10]",
-        trailing_text="[\$()]",
-        min=1,
-        max=10,
-        value=1,
-        variable="xscale"
-    ),  
-    Slider(
-        text="Y Scale [1-10]",
-        trailing_text="[\$()]",
-        min=1,
-        max=10,
-        value=1,
-        variable="yscale"
-    ),  
-    H1Label("Static Image Example"),
-    Image(
-        source="\$(image)",
-    ),        
-    H1Label("Image Viewer allowing Pan (left-drag) and Zoom (wheel)"),
-    PanZoom(
-        style="width: 100%; height=400px;",
-        content = Container(
-            direction = "row warp",
-            children = [
-                Image(
-                    source="\$(image)",
-                ),        
-            ]
-        ),
-    ),        
+    Card(
+        title="Controls",
+        content=VContainer(
+            Slider(
+                text="X Scale [1-10]",
+                trailing_text="[\$()]",
+                min=1,
+                max=10,
+                value=1,
+                variable="xscale"
+            ),  
+            Slider(
+                text="Y Scale [1-10]",
+                trailing_text="[\$()]",
+                min=1,
+                max=10,
+                value=1,
+                variable="yscale"
+            ),  
+        ),              
+    ),
+
+    Card(
+        title="Result Image",
+        content=VContainer(
+            Image(
+                source="\$(image)",
+            ),        
+        ),              
+    ),
+
+    Glimmer.exampleSourceAsCard(@__FILE__),     # add the source code of the example as the last control
 
 )
-FlexUI.controls!(app, ui)
-
+# set the controls for the application
+controls!(app, ui)
 
 #---------------------------------------------------------------
 # the render function
@@ -89,14 +83,10 @@ function render()
 end
 renderFunction!(app, render)
 
-
 #---------------------------------------------------------------
 # Run the application
 #---------------------------------------------------------------
-# render()
 run(app)
-
-
 
 println("End [$(splitext(basename(@__FILE__))[1])]")
 

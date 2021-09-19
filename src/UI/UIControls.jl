@@ -31,6 +31,7 @@ export  Container,
 
         CodeSnip,
         CodeSnipJulia,
+        RawHTML,
 
         VContainer,
         HContainer,
@@ -94,7 +95,7 @@ typedict(x) = Dict(fn=>getfield(x, fn) for fn ∈ filter(x->!startswith(string(x
 @with_kw mutable struct Container <: AbstractUIControl 
     type::String = "container"
     direction::String = "row"
-    gap::String = "10px"
+    gap::String = "20px"
     align::String = "left left"
     children::Vector{UIControls.AbstractUIControl} = []
 
@@ -104,8 +105,23 @@ end
 VContainer(args...) = Container(direction = "column", children=[args...])
 HContainer(args...) = Container(direction = "row", align="left center",  children=[args...])
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
+HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 
+"""
+    Slider Control
 
+Create a slider control.
+
+```julia
+    text::String = ""                   # text to apear to the left of the slider
+    trailing_text::String = ""          # text to apear to the right of the slider
+    min::Float64 = 0.0                  # minimum value
+    max::Float64 = 100.0                # maximum value
+    value::Float64 = 0                  # starting value (unused if connected to a variable)
+    step::Float64 = 1.0                 # tick change value
+    variable::Any = nothing             # variable
+```    
+"""
 @with_kw mutable struct Slider <: AbstractUIControl 
     type::String = "slider"
     text::String = ""
@@ -184,6 +200,7 @@ end
 
 @with_kw mutable struct Field <: AbstractUIControl 
     type::String = "field"
+    style::Any = ""
     input::String = "number"
     label::String = "default label"
     hint::String = "hint"
@@ -304,5 +321,16 @@ MDJulia(code) = Markdown(content = """```julia\n$(code)\n```""")
 end
 
 CodeSnipJulia(code) = CodeSnip(text=code, commandLine=true, prompt="julia>")
+
+
+@with_kw mutable struct RawHTML <: AbstractUIControl 
+    type::String = "raw-html"
+    html::String = ""
+    style::Any = "width: 100%; height: 400px;"
+    useFrame::Bool = false
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
+
 
 end # module UIControlsget

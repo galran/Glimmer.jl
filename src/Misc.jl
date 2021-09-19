@@ -14,7 +14,10 @@ export  AbstractScene,
         AbstractUIApp,
         AbstractUIVariable,
         AbstractUIValidation,
-        AbstractUIControl
+        AbstractUIControl,
+        renderHTML,
+        renderWGLMakieHTML,
+        identityTransform
 
 # place holders for function names        
 prop() = 0        
@@ -32,6 +35,15 @@ show_svg(io, x) = show(io, MIME"image/svg+xml"(), x)
 
 base64png(img) = "data:image/png;base64,$(Base64.base64encode(show_png, img))"
 base64svg(img) = "data:image/svg+xml;base64,$(Base64.base64encode(show_svg, img))"
+
+
+function renderHTML(obj)
+    io = IOBuffer()
+	Base.show(io, MIME"text/html"(), obj)
+    res = String(take!(io))
+ 
+    return res
+end
 
 
 # #---------------------------------------------------------------
@@ -184,4 +196,22 @@ function runExample(example::String)
     @show code
     exp = Meta.parse(code)
     return eval(exp)
+end
+
+function exampleSourceAsCard(srcFilename::String, title::String="Example Source Code")
+    sourceCode = ""
+    open(srcFilename, "r") do file
+        sourceCode = read(file, String)
+    end
+
+    return Card(
+        title=title,
+        content=VContainer(
+            CodeSnip(
+                text = sourceCode,
+                lineNumbers = true;
+            ),
+        ),
+    )
+
 end

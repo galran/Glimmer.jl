@@ -15,7 +15,6 @@ expansion_panel_style = "margin:0.2em;"
 expansion_panel_header_style = "" # "border: 1px solid lightgray!important;"
 expansion_panel_subtitle_style = "position: absolute; padding-left: 30%;"
 
-
 # ---------------------------------------------------------------
 # utility functions
 # ---------------------------------------------------------------
@@ -44,7 +43,7 @@ current_module = @__MODULE__
 # Create the Application Object and the 3D viewer 
 # ---------------------------------------------------------------
 app = App()
-FlexUI.prop!(app, :title, "Glimmer Example - Controls Gallery")
+prop!(app, :title, "Glimmer Example - Controls Gallery")
 
 # scene = Scene(openWindow = false)
 # set_Z_up!(scene)
@@ -1021,7 +1020,8 @@ ui = VContainer(
     ),
 
 )
-FlexUI.controls!(app, ui)
+# set the controls for the application
+controls!(app, ui)
 
 # ---------------------------------------------------------------
 # Run the application

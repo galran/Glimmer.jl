@@ -95,6 +95,22 @@ end
 #     app._viewer_url = url
 # end
 
+"""
+    forceUpdateControls!(app::App)
+
+Force an update of controls that are not updated during the normal execution of an application. Currently, RawHTML is the only    
+component that behaves like that due to the time it can take to update it.
+"""
+function forceUpdateControls!(app::App)
+    if (app !== nothing && Glimmer.win(app) != nothing)
+        Blink.@js_ Glimmer.win(app) begin
+            window.fireAngularEvent("updateRawHTML", [])
+        end
+        render!(app)
+    end
+end
+
+
 renderFunction(app::App) = app._render_function
 function renderFunction!(app::App, render_func::Union{Nothing, Function})
     app._render_function = render_func
@@ -176,8 +192,8 @@ function prepareJSStructure(app::App)
     )
 
     res[:app][:title] = prop(app, :title, "?? app title ??")
-    @info app._props
-    @info prop(app, :title, "?? app title ??")
+    # @info app._props
+    # @info prop(app, :title, "?? app title ??")
 
     # add variables
     for var in variables(app)
@@ -266,7 +282,7 @@ function onBlinkUpdate(args::Dict{Any, Any}, app::App)
     if get(meta_data, "source", "") == "variable-update"
         var_name = get(data, "name", "")
         index = findfirst(x -> (x.name == var_name), variables(app))
-        if (index == nothing)
+        if (index === nothing)
             @error "Failed to locate a variable [$var_name]"
         else
             var = variables(app)[index]
@@ -298,10 +314,10 @@ function onBlinkUpdate(args::Dict{Any, Any}, app::App)
         
         w = Glimmer.win(app)
         id = w.id
-        @info "zoom level", level
+        # @info "zoom level", level
         command = """windows["$(id)"].webContents.setZoomFactor($level);"""
         Blink.js(w.shell, Blink.JSString(command), callback=false)
-        @info "zoom level done"
+        # @info "zoom level done"
 
     end
 
@@ -339,11 +355,22 @@ function Glimmer.updateVariable!(app::App, var::UIVariables.AbstractUIVariable)
         @error "unsupported behaviour - please check"
     end
 
-    # send update to julia
-    data = UIVariables.typedict(var)
-    Blink.@js_ Glimmer.win(app) begin
-        window.fireAngularEvent("setVariableFromJulia", [$(data)])
+    # send update to julia - check that the app and win are set already. 
+    # otherwise it might be an assignment to the variable before running the application
+    if (app !== nothing && Glimmer.win(app) != nothing)
+        data = UIVariables.typedict(var)
+        Blink.@js_ Glimmer.win(app) begin
+            window.fireAngularEvent("setVariableFromJulia", [$(data)])
+        end
+
+        render!(app)
     end
+
+    # call variable's onChange function
+    if (var._on_change_func !== nothing)
+        var._on_change_func(var.value)
+    end
+
     render!(app)
 end
 
@@ -354,8 +381,8 @@ function render!(app::App)
     end
     app.__insideRender = true;
     try
-    # call the general update function
-    if (renderFunction(app) !== nothing)
+        # call the general update function
+        if (renderFunction(app) !== nothing)
             renderFunction(app)()
         end
     catch e

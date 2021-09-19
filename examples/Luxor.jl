@@ -1,76 +1,67 @@
 module Example
 
 using Glimmer, Glimmer.FlexUI
-using Colors
-using StaticArrays
-using GeometryBasics
 import Luxor
 
 println("Start [$(splitext(basename(@__FILE__))[1])]")
 
+#---------------------------------------------------------------
+# define the application and some basic properties such as title and initial window size
+#---------------------------------------------------------------
 app = App()
 prop!(app, :title, "Glimmer Example - Luxor")
-
+prop!(app, :winInitWidth, 1200)
+prop!(app, :winInitHeight, 800)
 
 #---------------------------------------------------------------
 # Define Variables
 #---------------------------------------------------------------
-
 angle = addVariable!(app, Variable(name="angle", type="flota64",value=8))
 count = addVariable!(app, Variable(name="count", type="flota64",value=16))
 
-image = addVariable!(app, Variable(
-    name="image",
-    type="image",
-    value="", 
-))
+image = addVariable!(app, Variable(name="image", type="image", value="", ))
 
 #---------------------------------------------------------------
 # Define Controls
 #---------------------------------------------------------------
-
 ui = VContainer(
-    H1Label("Value Controls"),
-    Slider(
-        text="Angle (π over value)",
-        trailing_text="[\$()]",
-        min=2,
-        max=16,
-        value=8,
-        variable="angle"
-    ),  
-    Slider(
-        text="Count",
-        trailing_text="[\$()]",
-        min=1,
-        max=30,
-        value=16,
-        variable="count"
-    ),  
-    H1Label("Static Image Example"),
-    Image(
-        source="\$(image)",
-        # height="50%",
-    ),        
-    H1Label("Image Viewer allowing Pan (left-drag) and Zoom (wheel)"),
-    PanZoom(
-        style="width: 100%; height=400px;",
-        content = Container(
-            direction = "row warp",
-            children = [
-                Image(
-                    source="\$(image)",
-                ),        
-            ]
-        ),
-    ),        
+    Card(
+        title="Controls",
+        content=VContainer(
+            Slider(
+                text="Angle (π over value)",
+                trailing_text="[\$()]",
+                min=2,
+                max=16,
+                value=8,
+                variable="angle"
+            ),  
+            Slider(
+                text="Count",
+                trailing_text="[\$()]",
+                min=1,
+                max=30,
+                value=16,
+                variable="count"
+            ),  
+        ),              
+    ),
+    Card(
+        title="Result Image",
+        content=VContainer(
+            Image(
+                source="\$(image)",
+            ),        
+        ),              
+    ),
 
+    Glimmer.exampleSourceAsCard(@__FILE__),     # add the source code of the example as the last control
 )
-FlexUI.controls!(app, ui)
-
+# set the controls for the application
+controls!(app, ui)
 
 #---------------------------------------------------------------
-# the render function
+# the render function - preparing the image
 #---------------------------------------------------------------
 function render()
     Luxor.Drawing(600, 400, :svg)
@@ -97,10 +88,9 @@ function render()
     Luxor.finish()
     
 
-    image["svg"] = Luxor.preview()
+    image["svg"] = Luxor.preview()      # updating the UI with the new image
 end
 renderFunction!(app, render)
-
 
 #---------------------------------------------------------------
 # Run the application
