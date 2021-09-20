@@ -274,7 +274,7 @@ function Base.run(app::App)
 
 end
 
-function onBlinkUpdate(args::Dict{Any, Any}, app::App)
+function onBlinkUpdate(args::Dict, app::App)
     # @info args
     meta_data = args["meta_data"]
     data = args["data"]
