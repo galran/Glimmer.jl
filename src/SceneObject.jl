@@ -346,7 +346,7 @@ function render!(ls::LineSegments)
     else
         MeshCat.setobject!(v, MeshCat.LineSegments(GeometryBasics.Point.(points(ls))))
     end
-    MeshCat.settransform!(v, transform(local_tr(ls)))
+    MeshCat.settransform!(v, local_tr(ls))
 end
 
 #-----------------------------------------------------------------
