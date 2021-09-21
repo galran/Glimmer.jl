@@ -52,7 +52,7 @@ prop!(app, :winInitHeight, 800)
 ui = VContainer(
     Card(
         title="This is an example of a WGLMakie scene",
-        subtitle="WGLMakie allow us to embed an interactive Makie figure into any webpage. Note: Not every figure is interactive (see thge second one), but according to the developers, more and more will becode so in the future.",
+        subtitle="WGLMakie allow us to embed an interactive Makie figure into any webpage. Note: Not every figure is interactive (see the second one), but according to the developers, more and more will become so in the future.",
         content=VContainer(
             Card(
                 title="Interactive Figure (use mouse to rotate)",
