@@ -32,6 +32,7 @@ export  Container,
         CodeSnip,
         CodeSnipJulia,
         RawHTML,
+        CodeEditor,
 
         VContainer,
         HContainer,
@@ -328,6 +329,21 @@ CodeSnipJulia(code) = CodeSnip(text=code, commandLine=true, prompt="julia>")
     html::String = ""
     style::Any = "width: 100%; height: 400px;"
     useFrame::Bool = false
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
+
+@with_kw mutable struct CodeEditor <: AbstractUIControl 
+    type::String = "code-editor"
+    language::String = "julia"
+    theme::String = "vs-dark"           # options are: vs, vs-dark and hc-black
+    style::Any = "height: 500px;"
+    readOnly::Bool = false
+    contextMenu::Bool = true
+
+    diff::Bool = false                  # show a code difference between the two variables
+    variable::Any = nothing
+    variableOriginal::Any = nothing     # relavent only in diff=true cases
 
     _app::Union{Nothing, AbstractUIApp} = nothing
 end

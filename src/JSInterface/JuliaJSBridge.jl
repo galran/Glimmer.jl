@@ -235,7 +235,21 @@ function application_node(jjs::JuliaJS, app_dir::String)
     #     """
     # end
 
+    base_folder = replace(abspath(dist_dir), '\\' => '/')
+
     node = Node(:dom, 
+        # Node(
+        #     :base,
+        #     attributes=Dict(
+        #         :href => base_folder,
+        #     ),
+        # ),
+        # Node(
+        #     :script,
+        #     attributes=Dict(
+        #         :src => "assets/monaco-editor/min/vs/loader.js",
+        #     ),
+        # ),
         JuliaJSBridge.node(jjs),
         JS_loader_node(
             joinpath(dirname(@__FILE__), "localjs.js"),

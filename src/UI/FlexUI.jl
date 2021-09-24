@@ -236,6 +236,8 @@ function Base.run(app::App)
         :webPreferences => Blink.@d(
             :webSecurity => false, 
             :experimentalFeatures => true,
+            :nodeIntegration => true,
+            :contextIsolation => false,
         ),
     )
     win =Blink. Window(window_defaults)
@@ -255,7 +257,7 @@ function Base.run(app::App)
 
     # show the blink window
     Blink.body!(win, ui, async=false)
-    # Blink.AtomShell.opentools(win)
+    Blink.AtomShell.opentools(win)
 
     # set the controls through JavaScript and also the viewer url
     # js_controls = [UIControls.typedict(c) for c in controls(app)]
