@@ -13,6 +13,11 @@ import ColorSchemes
 import FileIO
 import MeshIO
 
+import Tables
+import JSON, JSONTables
+import Dates
+using OrderedCollections 
+
 using StaticArrays
 import UUIDs
 import Base64
@@ -21,6 +26,7 @@ using Reexport
 
 
 include("Misc.jl")
+include("GridUtils.jl")
 include("Material.jl")
 include("SceneObject.jl")
 include("Scene.jl")
@@ -36,6 +42,7 @@ include("UI/FlexUI.jl")
 
 @reexport using ..UIControls
 @reexport using ..UIVariables
+@reexport using ..GridUtils
 
         
 #------------------------------------------------------------------------------
@@ -46,7 +53,7 @@ export  Scene,
         set_Z_up!,
         grid!,
         axes!,
-        root, root!,
+        # root, root!,
         parent, parent!,
         material, material!,
         Material,
@@ -68,8 +75,7 @@ export  Scene,
         zero3,
         cameraTransform!,
         url,
-        clear,
-        DummyExport
+        clear
 
 
 export  BasicValidation, on, Variable
@@ -99,11 +105,10 @@ export  Container,
         H1Label,
         H2Label,
         H3Label,
-        H4Label,
-
-        DummyExport
+        H4Label
 
 
-export FlexUI, addVariable!, prop, prop!, controls, controls!, renderFunction, renderFunction!
+# export the common functions of a UI implementation
+export addVariable!, prop, prop!, controls, controls!, renderFunction, renderFunction!
 
 end # module Glimmer

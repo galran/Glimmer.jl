@@ -10,11 +10,12 @@ import WebIO
 import UUIDs
 
 export  App, 
-        win, 
+        # win, 
         jjs, 
         variables, variables!, 
+        variable,
         controls, controls!, 
-        viewerUrl, viewerUrl!, 
+        # viewerUrl, viewerUrl!, 
         renderFunction, renderFunction!,
         addVariable!,
         run
@@ -80,15 +81,30 @@ function variables!(app::App, variables::Vector)
     app._variables = convert(Vector{UIVariables.AbstractUIVariable}, variables)
 end
 
-controls(app::App) = app._controls
-function controls!(app::App, controls::Vector)
+Glimmer.controls(app::App) = app._controls
+function Glimmer.controls!(app::App, controls::Vector)
     app._controls = convert(Vector{UIControls.AbstractUIControl}, controls)
     fix_controls!(app, app._controls)
 end
-function controls!(app::App, control::AbstractUIControl)
+function Glimmer.controls!(app::App, control::AbstractUIControl)
     app._controls = [control]
     fix_controls!(app, app._controls)
 end
+
+"""
+    variable(app::App, name::String)
+
+Return the variable object or nothing if variable cannot be found in app.    
+"""
+function variable(app::App, name::String)
+    index = findfirst(x -> (x.name == name), variables(app))
+    if (index === nothing)
+        return nothing
+    else
+        return variables(app)[index]
+    end
+end
+
 
 # viewerUrl(app::App) = app._viewer_url
 # function viewerUrl!(app::App, url::String)
@@ -111,8 +127,8 @@ function forceUpdateControls!(app::App)
 end
 
 
-renderFunction(app::App) = app._render_function
-function renderFunction!(app::App, render_func::Union{Nothing, Function})
+Glimmer.renderFunction(app::App) = app._render_function
+function Glimmer.renderFunction!(app::App, render_func::Union{Nothing, Function})
     app._render_function = render_func
 end
 
@@ -130,7 +146,7 @@ function var(app::App, var_name::String)
 end
 
 
-function addVariable!(app::App, var::AbstractUIVariable)
+function Glimmer.addVariable!(app::App, var::AbstractUIVariable)
     if (findVariable(app, var.name) !== nothing)
         error("Application already contains a variable [$(var.name)]")
     end
@@ -278,7 +294,7 @@ function onBlinkUpdate(args::Dict, app::App)
     # @info args
     meta_data = args["meta_data"]
     data = args["data"]
-
+    
     if get(meta_data, "source", "") == "variable-update"
         var_name = get(data, "name", "")
         index = findfirst(x -> (x.name == var_name), variables(app))
@@ -291,11 +307,23 @@ function onBlinkUpdate(args::Dict, app::App)
         end
 
         # call variable's onChange function
-        if (var._on_change_func !== nothing)
-            var._on_change_func(val)
-        end
+        # if (var._on_change_func !== nothing)
+        #     var._on_change_func(val)
+        # end
+        emit(var, :valueChanged)
 
         render!(app)
+    
+    elseif get(meta_data, "source", "") == "event"
+        # @info args
+        event = Symbol(get(data, "type", "unknownEvet"))
+        if (haskey(data, "variable"))
+            var_name = get(data, "variable", "")
+            var = variable(app, var_name)
+            if (var != nothing)
+                emit(var, event, data)
+            end
+        end
 
     elseif get(meta_data, "source", "") == "dev-tools-update"
         state = get(data, "state", "")
@@ -318,7 +346,8 @@ function onBlinkUpdate(args::Dict, app::App)
         command = """windows["$(id)"].webContents.setZoomFactor($level);"""
         Blink.js(w.shell, Blink.JSString(command), callback=false)
         # @info "zoom level done"
-
+    else
+        @warn "Got a BLINK message - don't know how to handle it\n" args 
     end
 
     # id = data["id"]
@@ -367,9 +396,10 @@ function Glimmer.updateVariable!(app::App, var::UIVariables.AbstractUIVariable)
     end
 
     # call variable's onChange function
-    if (var._on_change_func !== nothing)
-        var._on_change_func(var.value)
-    end
+    # if (var._on_change_func !== nothing)
+    #     var._on_change_func(var.value)
+    # end
+    emit(var, :valueChanged)
 
     render!(app)
 end
