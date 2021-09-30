@@ -171,7 +171,7 @@ function JS_loader_node(filenames...)
 end
 
 """
-Fixing the path in the styles file for the MAterialIcons font for Blink to load locally from the dist directory
+Fixing the path in the styles file for the MaterialIcons font for Blink to load locally from the dist directory
 """
 function fixMaterialIConsStyles(styles_fn::String)
     f = open(styles_fn, "r")

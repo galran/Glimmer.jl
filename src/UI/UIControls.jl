@@ -32,16 +32,18 @@ export  Container,
         CodeSnip,
         CodeSnipJulia,
         RawHTML,
+        AGGrid,
 
         VContainer,
         HContainer,
         HContainerSpace,
+        HContainerSpaceStart,
+        HContainerStartStart,
         H1Label,
         H2Label,
         H3Label,
-        H4Label,
+        H4Label
 
-        DummyExport
         
 
 
@@ -106,6 +108,8 @@ VContainer(args...) = Container(direction = "column", children=[args...])
 HContainer(args...) = Container(direction = "row", align="left center",  children=[args...])
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
+HContainerSpaceStart(args...) = Container(direction = "row", align="space-between start",  children=[args...])
+HContainerStartStart(args...) = Container(direction = "row", align="start start",  children=[args...])
 
 """
     Slider Control
@@ -328,6 +332,14 @@ CodeSnipJulia(code) = CodeSnip(text=code, commandLine=true, prompt="julia>")
     html::String = ""
     style::Any = "width: 100%; height: 400px;"
     useFrame::Bool = false
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
+
+@with_kw mutable struct AGGrid <: AbstractUIControl 
+    type::String = "ag-grid"
+    style::Any = "width: 100%; height: 400px;"
+    variable::Any = nothing
 
     _app::Union{Nothing, AbstractUIApp} = nothing
 end

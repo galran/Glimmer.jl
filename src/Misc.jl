@@ -16,12 +16,19 @@ export  AbstractScene,
         AbstractUIValidation,
         AbstractUIControl,
         renderHTML,
-        renderWGLMakieHTML,
-        identityTransform
+        identityTransform, 
+        
+        gridButtonCell
 
+  
 # place holders for function names        
 prop() = 0        
-prop!() = 0        
+prop!() = 0       
+addVariable!() = 0
+controls() = 0
+controls!() = 0
+renderFunction() = 0
+renderFunction!() = 0
 
 function updateVariable!(app::AbstractUIApp, var::AbstractUIVariable)
     @error "abstract function - should not reach here"
@@ -215,3 +222,149 @@ function exampleSourceAsCard(srcFilename::String, title::String="Example Source 
     )
 
 end
+
+
+#---------------------------------------------------------
+# Tables and AG-Grid Utility Functions
+#---------------------------------------------------------
+
+# function gridButtonCell(; header::String = "button header", eventName::String = "userCustomButton")
+#     res = Dict()
+
+#     res["headerName"] = header;
+#     res["cellRenderer"] = "buttonCellRenderer"
+#     res["juliaEventName"] = eventName
+
+#     res["editable"] = false;
+#     res["sortable"] = false;
+#     res["floatingFilter"] = false;
+#     res["filter"] = ""
+
+#     return res
+# end
+
+# function treeViewCell(; 
+#     field::String = "?",
+#     header::String = "button header", 
+#     eventName::String = "userCustomButton"
+# )
+#     res = Dict()
+
+#     res["field"] = field;
+#     res["headerName"] = header;
+#     res["cellRenderer"] = "treeViewCellRenderer"
+#     res["juliaEventName"] = eventName
+
+#     res["editable"] = false;
+#     res["sortable"] = false;
+#     res["floatingFilter"] = false;
+#     res["filter"] = ""
+
+#     return res
+# end
+
+# function _is_javascript_safe(x::Integer)
+#     min_safe_int = -(Int64(2)^53-1)
+#     max_safe_int = Int64(2)^53-1
+#     min_safe_int < x < max_safe_int
+# end
+
+# function _is_javascript_safe(x::AbstractFloat)
+#     min_safe_float = -(Float64(2)^53-1)
+#     max_safe_float = Float64(2)^53-1
+#     min_safe_float < x < max_safe_float
+# end
+
+
+# function table2json(schema, rows)
+#     res = []
+#     for (i, row) in enumerate(rows)
+#         r = OrderedDict()
+#         Tables.eachcolumn(schema, row) do val, ind, name
+#             if val isa Real && isfinite(val) && _is_javascript_safe(val)
+#                 # JSON.show_pair(columnwriter, ser, name, val)
+#                 r[name] = val
+#             elseif val === nothing || val === missing
+#                 # JSON.show_pair(columnwriter, ser, name, repr(val))
+#                 r[name] = repr(val)
+#             else
+#                 # JSON.show_pair(columnwriter, ser, name, sprint(print, val))
+#                 r[name] = sprint(print, val)
+#             end
+#         end
+#         push!(res, r)
+#     end
+#     return res
+
+#     # io = IOBuffer()
+#     # rowwriter = JSON.Writer.CompactContext(io)
+#     # JSON.begin_array(rowwriter)
+#     # ser = JSON.StandardSerialization()
+#     # for (i, row) in enumerate(rows)
+#     #     JSON.delimit(rowwriter)
+#     #     columnwriter = JSON.Writer.CompactContext(io)
+#     #     JSON.begin_object(columnwriter)
+#     #     Tables.eachcolumn(schema, row) do val, ind, name
+#     #         if val isa Real && isfinite(val) && _is_javascript_safe(val)
+#     #             JSON.show_pair(columnwriter, ser, name, val)
+#     #         elseif val === nothing || val === missing
+#     #             JSON.show_pair(columnwriter, ser, name, repr(val))
+#     #         else
+#     #             JSON.show_pair(columnwriter, ser, name, sprint(print, val))
+#     #         end
+#     #     end
+#     #     JSON.end_object(columnwriter)
+#     # end
+#     # JSON.end_array(rowwriter)
+#     # String(take!(io))
+# end
+
+
+# function table2agGrid(table)
+#     res = OrderedDict()
+
+#     rows = Tables.rows(table)
+#     schema = Tables.schema(rows)
+    
+#     names = schema.names
+#     types = schema.types
+
+#     # create the original schema
+#     # for (index, fieldName) in enumerate(schema.names)
+#     #     push!(res[:schema], Dict{Symbol, Any}(
+#     #         :index => index,
+#     #         :name => fieldName,
+#     #         :type => schema.types[index],
+#     #     ))
+#     # end
+
+#     # create the column definitions
+#     res["columnDefs"] = [
+#         OrderedDict(
+#             "headerName" => string(n),
+#             # "editable" => cell_changed !== nothing,
+#             "headerTooltip" => string(types[i]),
+#             "field" => string(n),
+#             "sortable" => true,
+#             "resizable" => true,
+#             "type" => types[i] <: Union{Missing, T where T <: Number} ? "numericColumn" : nothing,
+#             "filter" => types[i] <: Union{Missing, T where T <: Dates.Date} ? "agDateColumnFilter" :
+#                     types[i] <: Union{Missing, T where T <: Number} ? "agNumberColumnFilter" : true,
+#         ) for (i, n) in enumerate(schema.names)
+#     ]
+
+#     res["defaultColDef"] = OrderedDict(
+#         "width" => 150,
+#         "editable" => true,
+#         "filter" => "agTextColumnFilter",
+#         "floatingFilter" => true,
+#         "resizable" => true,
+#     )
+
+#     res["rowData"] = table2json(schema, rows)
+
+
+#     return res;
+# end
+
+
