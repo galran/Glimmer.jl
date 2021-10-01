@@ -110,6 +110,7 @@ end
 
 VContainer(args...) = Container(direction = "column", children=[args...])
 HContainer(args...) = Container(direction = "row", align="left center",  children=[args...])
+HContainerCenter(args...) = Container(direction = "row", align="center center",  children=[args...])
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerSpaceStart(args...) = Container(direction = "row", align="space-between start",  children=[args...])

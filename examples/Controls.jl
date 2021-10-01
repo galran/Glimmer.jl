@@ -3,6 +3,7 @@ module Example
 using Glimmer, Glimmer.FlexUI
 using Colors
 using StaticArrays
+import Markdown as MD
 
 println("Start [$(splitext(basename(@__FILE__))[1])]")
 
@@ -10,9 +11,12 @@ println("Start [$(splitext(basename(@__FILE__))[1])]")
 # some default styles
 # ---------------------------------------------------------------
 card_style = "margin:0.2em; border: 1px solid lightgray!important; border-radius: 30px !important;"
+highlight_color_style = "background-color: #D1F2EB;"
+
 
 expansion_panel_style = "margin:0.2em;"
-expansion_panel_header_style = "" # "border: 1px solid lightgray!important;"
+expansion_panel_style = "margin:0.4em; border: 0.5px solid lightgray!important; border-radius: 10px !important;"
+expansion_panel_header_style = "font-weight: bold;" # "border: 1px solid lightgray!important;"
 expansion_panel_subtitle_style = "position: absolute; padding-left: 30%;"
 
 # ---------------------------------------------------------------
@@ -183,6 +187,16 @@ end
 # ---------------------------------------------------------------
 
 ui = VContainer(
+    Card(
+        # title="Information",
+        style=card_style * highlight_color_style,
+        content=UIControls.HContainerCenter(
+            Label(
+                text = "This example shows most of the Glimmer.jl UI controls in an interactive format.",
+                style = "font-weight: bold; font-size:24px; align: center;",
+            ),
+        ),              
+    ),
     Accordion(
         panels=[
 
@@ -191,7 +205,7 @@ ui = VContainer(
                 title="Label",
                 subtitle="labels are non-interactive elements used to display text",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -224,7 +238,7 @@ ui = VContainer(
                 title="Field",
                 subtitle="fields allow user input",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -267,7 +281,7 @@ ui = VContainer(
                             content=VContainer(
                                 syntax("""Field(
                                     input="select",
-                                    label="A Simple ComboBox",
+                                    label="A basic ComboBox",
                                     hint="Please select an option",
                                     variable="option",
                                     options=[
@@ -293,13 +307,13 @@ ui = VContainer(
                 title="Slider",
                 subtitle="sliders allow range type update of values",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple Slider",
+                            title="Basic Slider",
                             style=card_style,
                             content=VContainer(
                                 syntax("""Slider(
@@ -361,13 +375,13 @@ ui = VContainer(
                 title="Button",
                 subtitle="buttons are activators that can run functions in the Julia backend",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple Button",
+                            title="Basic Button",
                             style=card_style,
                             content=VContainer(
                                 syntax("""HContainer(
@@ -599,13 +613,13 @@ ui = VContainer(
                 title="Image and PanZoom",
                 subtitle="controls for displaying images",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple Image",
+                            title="Basic Image",
                             style=card_style,
                             content=VContainer(
                                 syntax("""Image(
@@ -667,13 +681,13 @@ ui = VContainer(
                 title="CheckBox and SlideToggle",
                 subtitle="togglers",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple checkbox",
+                            title="Basic CheckBox",
                             style=card_style,
                             content=VContainer(
                                 syntax("""CheckBox(
@@ -689,7 +703,7 @@ ui = VContainer(
                             ),              
                         ),
                         Card(
-                            title="Simple SlideToggle",
+                            title="Basic SlideToggle",
                             style=card_style,
                             content=VContainer(
                                 syntax("""SlideToggle(
@@ -716,7 +730,7 @@ ui = VContainer(
                 title="RadioGroup and ButtonToggle",
                 subtitle="option selectors",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -786,7 +800,7 @@ ui = VContainer(
                 title="ExpansionPanel and Accordion",
                 subtitle="provides an expandable details-summary view",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -871,7 +885,7 @@ ui = VContainer(
                 title="Tabs",
                 subtitle="ganize content into separate views where only one view can be visible at a time",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -956,7 +970,7 @@ ui = VContainer(
                 title="Markdown and CodeSnip",
                 subtitle="support a basic implementation of the markdown language",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
@@ -1101,13 +1115,13 @@ ui = VContainer(
                 title="Grid",
                 subtitle="editing tabular and hierarchical data",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple Grid with a Combobox and Button examples",
+                            title="Basic Grid with a Combobox and Button examples",
                             style=card_style,
                             content=VContainer(
                                 AGGrid(
@@ -1146,13 +1160,13 @@ ui = VContainer(
                 title="Splitter",
                 subtitle="split views and allow dragging to resize areas",
                 style=expansion_panel_style,
-                headerStyle=expansion_panel_header_style,
+                titleStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
                 content=Container(
                     direction="row warp",
                     children=[
                         Card(
-                            title="Simple example of horizontal and vertical splitters",
+                            title="Basic example of horizontal and vertical splitters",
                             style=card_style,
                             content=VContainer(
                                 syntax("""Splitter(
@@ -1233,16 +1247,112 @@ ui = VContainer(
                                 )""")...,
                             ),              
                         ),
+                    ],
+                ),
+            ),  
+            
+            # RawHTML
+            ExpansionPanel(
+                title="RawHTML",
+                subtitle="allowing hosting of HTML rendered content inside the application",
+                style=expansion_panel_style,
+                titleStyle=expansion_panel_header_style,
+                subtitleStyle=expansion_panel_subtitle_style,
+                content=Container(
+                    direction="row warp",
+                    children=[
+                        Card(
+                            title="Techinal Details",
+                            style=card_style * highlight_color_style,
+                            # contentStyle="background-color: pink;",
+                            content=VContainer(
+                                Label(text="""The Glimmer package UI is an Angular application (a framework for building web applications)  
+                                              running inside a Blink window.  The UI controls that are supported by Glimmer are mostly Angular 
+                                              compatible components. However, sometimes you might find the need to host a pure html content 
+                                              inside the Glimmer UI. An example would be a Julia package that renders HTML, such as WGLMakie.jl 
+                                              or TableView.jl.""",
+                                ),
+                                Label(text="""Is such cases, you will need to use the RawHTML control. This control allows you to inject pure 
+                                              HTML to the angular scope or use an IFRAME html tag to treat it as an isolated island 
+                                              (useFrame = true or false). """,
+                                ),
+                            ),              
+                        ),
 
+                        Card(
+                            title="RawHTML inject an iframe tag",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""RawHTML(
+                                    html="<iframe id='inlineFrameExample'
+                                                title='Inline Frame Example'
+                                                width='100%'
+                                                height='300'
+                                                src='https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik'>
+                                            </iframe>
+                                        ",
+                                    style = "width: 100%; height: 100%;",
+                                )""")...,
+                            ),              
+                        ),
+
+
+                        Card(
+                            title="RawHTML inject an iframe tag",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""RawHTML(
+                                    html="<iframe width='560' height='415' 
+                                           src='https://www.youtube.com/embed/owsfdh4gxyc' 
+                                           frameborder='0' allowfullscreen></iframe>",
+                                )""")...,
+                            ),              
+                        ),
+
+                        Card(
+                            title="RawHTML display an entire html page in a frame",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""RawHTML(
+                                    html="<!DOCTYPE html>
+                                    <html>
+                                    <body>
+                                        <h1>My First Heading</h1>
+                                    
+                                        <p>\$(loremText).</p>
+                                    </body>
+                                    </html>",
+                                    style = "width: 100%; height: 300%;",
+                                    useFrame = true,
+                                )""")...,
+                            ),              
+                        ),
+                        
+                        Card(
+                            title="RawHTML result of rendering a Julia object's HTML",
+                            subtitle="Convert a Julia markdown string to it's HTML representation",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""RawHTML(
+                                    html=renderHTML(MD.md\"\"\"# Level One
+                                                            ## Level Two
+                                                            ### Level Three
+                                                            #### Level Four
+                                                            ##### Level Five
+                                                            ###### Level Six\"\"\" ),
+                                    style = "width: 100%; height: 300%;",
+                                    useFrame = true,
+                                )""")...,
+
+                            ),              
+                        ),
 
                     ],
                 ),
             ),            
             
-
         ],
     ),
-
 )
 # set the controls for the application
 controls!(app, ui)
