@@ -10,6 +10,8 @@ export  BasicValidation,
         emit,
         addGridColumn!,
         insertGridColumn!,
+        deleteGridColumn!,
+        replaceGridColumn!,
         gridOption!,
         gridColumnOption!,
         forEachGridColumn!,
@@ -242,12 +244,40 @@ function addGridColumn!(var::Variable, colDef::Dict)
 end
 
 """
-    addGridColumn!(var::Variable, colDef::Dict)
+    insertGridColumn!(var::Variable, index::Int64, colDef::Dict)
 
 Add a new grid column definition as the last column.
 """
 function insertGridColumn!(var::Variable, index::Int64, colDef::Dict)
     insert!(rawValue(var)["columnDefs"], index, colDef)
+end
+
+"""
+deleteGridColumn!(var::Variable, index::Int64)
+
+Delete a grid column at a specific index.
+"""
+function deleteGridColumn!(var::Variable, index::Int64)
+    deleteat!(rawValue(var)["columnDefs"], index:index)
+end
+
+"""
+    deleteGridColumn!(var::Variable, name::String)
+
+Delete a grid column at a specific index.
+"""
+function deleteGridColumn!(var::Variable, name::String)
+    colDefs = rawValue(var)["columnDefs"]
+    deleteat!(colDefs, findall(x->x["headerName"]==name || x["field"]==name,colDefs))
+end
+
+"""
+    replaceGridColumn!(var::Variable, index::Int64, colDef::Dict)
+
+Replace an existing grid column definition with a new one.
+"""
+function replaceGridColumn!(var::Variable, index::Int64, colDef::Dict)
+    rawValue(var)["columnDefs"][index] = colDef
 end
 
 """

@@ -30,7 +30,7 @@ ui = VContainer(
         content=VContainer(
             Slider(
                 text="X Scale [1-10]",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=1,
                 max=10,
                 value=1,
@@ -38,7 +38,7 @@ ui = VContainer(
             ),  
             Slider(
                 text="Y Scale [1-10]",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=1,
                 max=10,
                 value=1,

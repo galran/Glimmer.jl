@@ -84,7 +84,7 @@ ui = VContainer(
                                     ),  
                                     Slider(
                                         text="Mesh Opacity",
-                                        trailing_text="[\$()]",
+                                        trailingText="[\$()]",
                                         min=0,
                                         max=1,
                                         value=0.5,
@@ -107,7 +107,7 @@ ui = VContainer(
                                     ),  
                                     Slider(
                                         text="Points Opacity",
-                                        trailing_text="[\$()]",
+                                        trailingText="[\$()]",
                                         min=0,
                                         max=1,
                                         value=0.5,
@@ -122,7 +122,7 @@ ui = VContainer(
                                 content=VContainer(
                                     Slider(
                                         text="Sample Resolution",
-                                        trailing_text="[\$()]",
+                                        trailingText="[\$()]",
                                         min=4,
                                         max=100,
                                         value=20,

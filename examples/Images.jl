@@ -47,7 +47,7 @@ ui = VContainer(
         children = [
             Slider(
                 text="Segments Size",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=2,
                 max=100,
                 value=8,

@@ -20,6 +20,7 @@ export  Container,
         ButtonToggle,
         RadioGroup,
         CheckBox,
+        SlideToggle,
         ExpansionPanel, 
         Accordion,
         Tabs,
@@ -33,6 +34,9 @@ export  Container,
         CodeSnipJulia,
         RawHTML,
         AGGrid,
+
+        Splitter,
+        SplitterArea,
 
         VContainer,
         HContainer,
@@ -106,6 +110,7 @@ end
 
 VContainer(args...) = Container(direction = "column", children=[args...])
 HContainer(args...) = Container(direction = "row", align="left center",  children=[args...])
+HContainerCenter(args...) = Container(direction = "row", align="center center",  children=[args...])
 HContainerSpace(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerSpaceStart(args...) = Container(direction = "row", align="space-between start",  children=[args...])
@@ -118,7 +123,7 @@ Create a slider control.
 
 ```julia
     text::String = ""                   # text to apear to the left of the slider
-    trailing_text::String = ""          # text to apear to the right of the slider
+    trailingText::String = ""           # text to apear to the right of the slider
     min::Float64 = 0.0                  # minimum value
     max::Float64 = 100.0                # maximum value
     value::Float64 = 0                  # starting value (unused if connected to a variable)
@@ -129,7 +134,7 @@ Create a slider control.
 @with_kw mutable struct Slider <: AbstractUIControl 
     type::String = "slider"
     text::String = ""
-    trailing_text::String = ""
+    trailingText::String = ""
     min::Float64 = 0.0
     max::Float64 = 100.0
     value::Float64 = 0
@@ -210,16 +215,12 @@ end
     hint::String = "hint"
     options::Union{Nothing, Vector{Any}} = nothing
     variable::Any = nothing
-
-    _func::Union{Nothing, Function} = nothing
 end
 
 @with_kw mutable struct ButtonToggle <: AbstractUIControl 
     type::String = "button-toggle"
     options::Union{Nothing, Vector{Any}} = nothing
     variable::Any = nothing
-
-    _func::Union{Nothing, Function} = nothing
 end
 
 @with_kw mutable struct RadioGroup <: AbstractUIControl 
@@ -227,17 +228,23 @@ end
     direction::String = "horizontal"
     options::Union{Nothing, Vector{Any}} = nothing
     variable::Any = nothing
-
-    _func::Union{Nothing, Function} = nothing
 end
 
 @with_kw mutable struct CheckBox <: AbstractUIControl 
     type::String = "checkbox"
     label::String = "default label"
     variable::Any = nothing
-
-    _func::Union{Nothing, Function} = nothing
 end
+
+@with_kw mutable struct SlideToggle <: AbstractUIControl 
+    type::String = "slide-toggle"
+    text::String = ""
+    trailingText::String = ""
+    color::String = "primary"         # normal, primary, accent, warn, 
+    style::Any = ""
+    variable::Any = nothing
+end
+
 
 @with_kw mutable struct ExpansionPanel <: AbstractUIControl 
     type::String = "expansion-panel"
@@ -344,5 +351,24 @@ end
     _app::Union{Nothing, AbstractUIApp} = nothing
 end
 
+@with_kw mutable struct SplitterArea <: AbstractUIControl 
+    size::String = "50"
+    lockSize::Bool = false
+    minSize::Union{Nothing, Float64} = nothing
+    maxSize::Union{Nothing, Float64} = nothing
+    content::Union{Nothing, UIControls.Container} = nothing
+    style::Any = ""
+end
+
+
+@with_kw mutable struct Splitter <: AbstractUIControl 
+    type::String = "splitter"
+    units::Any = "pixel"                    # "percent" or "pixel"
+    direction::Any = "horizontal"           # "horizontal" or "vertical"
+    style::Any = ""
+    areas::Vector{SplitterArea}             
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
 
 end # module UIControlsget
