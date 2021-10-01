@@ -440,6 +440,9 @@ function toJSONTable(data::Vector{Any}, parent_id::Int64 = -1)
     JSONTables.jsontable(JSON.json(json_data))
 end
 
+function toJSONTable(jsonStr::String)
+    JSONTables.jsontable(jsonStr)
+end
 
 
 

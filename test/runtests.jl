@@ -198,7 +198,7 @@ using Test
                         HContainerSpace(
                             Slider(
                                 text="Embedded Value [\$()]",
-                                trailing_text="[\$()cm]",
+                                trailingText="[\$()cm]",
                                 min=0,
                                 max=100,
                                 value=10,
@@ -210,7 +210,7 @@ using Test
                                 children = [
                                     Label(text="""Slider(
                                         text="Embedded Value [\$()]",
-                                        trailing_text="[\$()cm]",
+                                        trailingText="[\$()cm]",
                                         min=0,
                                         max=100,
                                         value=10,
@@ -223,7 +223,7 @@ using Test
                         HContainerSpace(
                             Slider(
                                 text="Step Size",
-                                trailing_text="[\$()cm]",
+                                trailingText="[\$()cm]",
                                 min=0,
                                 max=1,
                                 value=0.5,
@@ -236,7 +236,7 @@ using Test
                                 children = [
                                     Label(text="""Slider(
                                         text="Step Size",
-                                        trailing_text="[\$()cm]",
+                                        trailingText="[\$()cm]",
                                         min=0,
                                         max=1,
                                         value=0.5,

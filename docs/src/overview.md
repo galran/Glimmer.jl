@@ -67,7 +67,7 @@ ui = VContainer(
         children = [
             Slider(                                 # Slider to control the segments size
                 text="Segments Size",
-                trailing_text="[\$()]",             # slider's label can contain a default 
+                trailingText="[\$()]",              # slider's label can contain a default 
                                                     # variable interpolation for its current value $()
                 min=2,
                 max=100,

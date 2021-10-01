@@ -16,6 +16,17 @@ expansion_panel_header_style = "" # "border: 1px solid lightgray!important;"
 expansion_panel_subtitle_style = "position: absolute; padding-left: 30%;"
 
 # ---------------------------------------------------------------
+# prepare some data for the grids
+# ---------------------------------------------------------------
+mlb_data_json = "[{\"Name\":\"Adam Donachie\",\"Team\":\"ANA\",\"Position\":\"Catcher\",\"Height(inches)\":74,\"Weight(lbs)\":180,\"Age\":22.99},{\"Name\":\"Paul Bako\",\"Team\":\"SEA\",\"Position\":\"Catcher\",\"Height(inches)\":74,\"Weight(lbs)\":215,\"Age\":34.69},{\"Name\":\"Ramon Hernandez\",\"Team\":\"BOS\",\"Position\":\"Catcher\",\"Height(inches)\":72,\"Weight(lbs)\":210,\"Age\":30.78},{\"Name\":\"Kevin Millar\",\"Team\":\"BAL\",\"Position\":\"First Baseman\",\"Height(inches)\":72,\"Weight(lbs)\":210,\"Age\":35.43},{\"Name\":\"Chris Gomez\",\"Team\":\"BAL\",\"Position\":\"First Baseman\",\"Height(inches)\":73,\"Weight(lbs)\":188,\"Age\":35.71},{\"Name\":\"Brian Roberts\",\"Team\":\"BAL\",\"Position\":\"Second Baseman\",\"Height(inches)\":69,\"Weight(lbs)\":176,\"Age\":29.39},{\"Name\":\"Miguel Tejada\",\"Team\":\"BAL\",\"Position\":\"Shortstop\",\"Height(inches)\":69,\"Weight(lbs)\":209,\"Age\":30.77},{\"Name\":\"Melvin Mora\",\"Team\":\"BAL\",\"Position\":\"Third Baseman\",\"Height(inches)\":71,\"Weight(lbs)\":200,\"Age\":35.07},{\"Name\":\"Aubrey Huff\",\"Team\":\"BAL\",\"Position\":\"Third Baseman\",\"Height(inches)\":76,\"Weight(lbs)\":231,\"Age\":30.19},{\"Name\":\"Adam Stern\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":71,\"Weight(lbs)\":180,\"Age\":27.05},{\"Name\":\"Jeff Fiorentino\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":73,\"Weight(lbs)\":188,\"Age\":23.88},{\"Name\":\"Freddie Bynum\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":73,\"Weight(lbs)\":180,\"Age\":26.96},{\"Name\":\"Nick Markakis\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":74,\"Weight(lbs)\":185,\"Age\":23.29},{\"Name\":\"Brandon Fahey\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":74,\"Weight(lbs)\":160,\"Age\":26.11},{\"Name\":\"Corey Patterson\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":69,\"Weight(lbs)\":180,\"Age\":27.55},{\"Name\":\"Jay Payton\",\"Team\":\"BAL\",\"Position\":\"Outfielder\",\"Height(inches)\":70,\"Weight(lbs)\":185,\"Age\":34.27},{\"Name\":\"Jay Gibbons\",\"Team\":\"BAL\",\"Position\":\"Designated Hitter\",\"Height(inches)\":72,\"Weight(lbs)\":197,\"Age\":30.0},{\"Name\":\"Erik Bedard\",\"Team\":\"BAL\",\"Position\":\"Starting Pitcher\",\"Height(inches)\":73,\"Weight(lbs)\":189,\"Age\":27.99},{\"Name\":\"Hayden Penn\",\"Team\":\"BAL\",\"Position\":\"Starting Pitcher\",\"Height(inches)\":75,\"Weight(lbs)\":185,\"Age\":22.38},{\"Name\":\"Adam Loewen\",\"Team\":\"BAL\",\"Position\":\"Starting Pitcher\",\"Height(inches)\":78,\"Weight(lbs)\":219,\"Age\":22.89}]"
+mlb_data_table = GridUtils.toJSONTable(mlb_data_json)
+
+countries_data_json = "[{\"Population\":\"30M\",\"ParentID\":-1,\"Type\":\"Country\",\"Name\":\"USA\",\"ID\":1},{\"Population\":\"250K \",\"ParentID\":1,\"Type\":\"City\",\"Name\":\"Seattle\",\"ID\":2},{\"Population\":\"600K \",\"ParentID\":1,\"Type\":\"City\",\"Name\":\"Boston\",\"ID\":3},{\"Population\":\"2M \",\"ParentID\":1,\"Type\":\"City\",\"Name\":\"New-York\",\"ID\":4},{\"Population\":\"250 people \",\"ParentID\":1,\"Type\":\"City\",\"Name\":\"Redmond\",\"ID\":5},{\"Population\":\"3 on week days\",\"ParentID\":5,\"Type\":\"Place\",\"Name\":\"City Center\",\"ID\":6},{\"Population\":\"0.5 during covid\",\"ParentID\":5,\"Type\":\"Place\",\"Name\":\"MS Campus\",\"ID\":7},{\"Population\":\"35M 24/7\",\"ParentID\":5,\"Type\":\"Place\",\"Name\":\"River Trail\",\"ID\":8},{\"Population\":\"20M\",\"ParentID\":-1,\"Type\":\"Country\",\"Name\":\"Canada\",\"ID\":9},{\"Population\":\"1.7M\",\"ParentID\":9,\"Type\":\"City\",\"Name\":\"Montreal\",\"ID\":10},{\"Population\":\"3M\",\"ParentID\":9,\"Type\":\"City\",\"Name\":\"Toronto\",\"ID\":11},{\"Population\":\"630K\",\"ParentID\":9,\"Type\":\"City\",\"Name\":\"Vancouver\",\"ID\":12},{\"Population\":\"25M\",\"ParentID\":-1,\"Type\":\"Country\",\"Name\":\"Mexico\",\"ID\":13},{\"Population\":\"9.2M\",\"ParentID\":13,\"Type\":\"City\",\"Name\":\"Mexico City\",\"ID\":14},{\"Population\":\"1.5M\",\"ParentID\":13,\"Type\":\"City\",\"Name\":\"Guadalajara\",\"ID\":15},{\"Population\":\"890K\",\"ParentID\":13,\"Type\":\"City\",\"Name\":\"Cancún\",\"ID\":16}]"
+countries_data_table = GridUtils.toJSONTable(countries_data_json)
+
+loremText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec ullamcorper sit amet risus nullam. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae."
+
+# ---------------------------------------------------------------
 # utility functions
 # ---------------------------------------------------------------
 # returns the syntaxt and the result of an expression
@@ -70,58 +81,108 @@ toggle1 = addVariable!(app, Variable(name="toggle1", type="bool", value=false))
 
 option1 = addVariable!(app, Variable(name="option1", type="string", value="first"))
 
+# prepare the grid tabel
+table_label = addVariable!(app, Variable(name="table_label", type="string", value="press the button to see row details"))
+table_var = addVariable!(app, Variable(name="table_var", type="aggrid", value=""))
+
+# setup the grid data and options - will get friendlier in the near future
+table_var[] = GridUtils.table2agGrid(mlb_data_table) 
+
+# setting some grid options - because of it's complexity, the grid's data and visualization properties 
+# are all stored in the variable and not the UI control.
+gridOption!(table_var, "rowSelection", "single")
+
+# insert a row field
+insertGridColumn!(table_var, 1, gridRowIndexCell(
+    header="Row", 
+    width=70, 
+    cellStyle = Dict(
+        "color" => "yellow",
+        "background-color" => "pink",
+    ),
+))
+
+# insert a combobox field in addition to the non-combobox Team field. you can edit either.
+replaceGridColumn!(table_var, 3, gridSelectCell(
+    header="Teams Combobox", 
+    field="Team",
+    selectOptions=[
+        Dict(:key=>"BAL", :value=>"Baltimore Orioles"),
+        Dict(:key=>"CWS", :value=>"College World Series"),
+        Dict(:key=>"ANA", :value=>"Los Angeles Angels"),
+        Dict(:key=>"BOS", :value=>"Boston Red Sox"),
+        Dict(:key=>"CLE", :value=>"Cleveland Indians"),
+        Dict(:key=>"OAK", :value=>"Oakland Athletics"),
+        Dict(:key=>"NYY", :value=>"New York Yankees"),
+        Dict(:key=>"DET", :value=>"Detroit Tigers"),
+        Dict(:key=>"SEA", :value=>"Seattle Mariners"),
+        Dict(:key=>"TB", :value=>"Tampa Bay Rays"),
+        Dict(:key=>"KC", :value=>"Kansas City Royals"),
+        Dict(:key=>"TEX", :value=>"Texas Rangers"),
+        
+    ]
+))
+
+# insert a button column and defining the event for it. further down we write a function to handle that event per row.
+insertGridColumn!(table_var, 4, gridButtonCell(
+    header="Example Button", 
+    eventName="myButtonClicked",
+    buttonText="Show Details",
+))
+
+# define the column default values (note the cellStyle to color a line red according to documantation existance)
+gridDefaultColDef!(table_var, gridCell(
+    editable=true, 
+    resizable=true,
+    # filter = "agTextColumnFilter",
+    # floatingFilter = true,
+    # cellStyle="__js__ params => params.data.hasDocs==false ? { color: 'red' } : { color: 'green' }",
+))
+
+# prepare the countries table grid
+table_var2 = addVariable!(app, Variable(name="table_var2", type="aggrid", value=""))
+
+# setup the grid data and options - will get friendlier in the near future
+# for tree type tables, we need to supply the name of the "id" firld and the "parent" field.
+table_var2[] = GridUtils.table2agGridTree(countries_data_table, "ID", "ParentID") 
+
+# setting some grid options - because of it's complexity, the grid's data and visualization properties 
+# are all stored in the variable and not the UI control.
+gridOption!(table_var2, "rowSelection", "single")
+gridOption!(table_var2, "showRowIndex", true)
+gridOption!(table_var2, "treeViewIndentPixels", 30)
+gridOption!(table_var2, "suppressScrollOnNewData", true)
+gridOption!(table_var2, "showTreeViewFilter", true)
+
+clearGridColumns!(table_var2)
+addGridColumn!(table_var2, gridTreeViewCell(header="Name", field="Name", width=250))
+addGridColumn!(table_var2, gridCell(header="Type", field="Type"))
+addGridColumn!(table_var2, gridCell(header="Population", field="Population"))
+
+# define the column default values (note the cellStyle to color a line red according to documantation existance)
+gridDefaultColDef!(table_var2, gridCell(
+    editable=false, 
+    resizable=true,
+    width=150,
+    # cellStyle="__js__ params => params.data.hasDocs==false ? { color: 'red' } : { color: 'green' }",
+))
+
+
+# ---------------------------------------------------------------
+# Define Events Handlers
+# ---------------------------------------------------------------
+on(table_var, :myButtonClicked) do val
+    # @info """Button Clicked: name=[$(val["data"]["Name"])]"""
+    data = val["data"]
+    table_label[] = """[$(data["Name"])] is a [$(data["Name"])], [$(data["Age"]) years old)]"""
+end
+
 
 # ---------------------------------------------------------------
 # Define Controls
 # ---------------------------------------------------------------
 
 ui = VContainer(
-    # Markdown(
-    #     content = "# Ran Gal\n## AAA\n",
-    # ),
-#     Markdown(
-#         content = 
-# raw"""
-
-# ## Markdown __rulez__!
-# ---
-
-# ### Syntax highlight
-# ## Syntax highlight
-# # __Syntax__ highlight
-
-# ```typescript
-# const language = 'typescript';
-# const language = 'typescript';
-# const language = 'typescript';
-# const language = 'typescript';
-# ````
-
-# ```julia
-# a::Float64 = 1.0
-# for i in 1:10
-#     println("This is a string interpolation $i")
-# end 
-# @info "some info"     
-# ```
-
-
-# this is __some__ ~~normal~~ text
-# Basic inline <abbr title="Hypertext Markup Language">HTML</abbr> may be supported.
-
-# ### Lists
-# 1. Ordered list with a [Link to google](http://www.google.com)
-# 2. Another bullet point
-#   - Unordered __list__
-#   - Another unordered bullet point
-
-# ### Blockquote
-# > Blockquote to the max
-
-
-# """,
-#     ),
-
     Accordion(
         panels=[
 
@@ -259,7 +320,7 @@ ui = VContainer(
                             content=VContainer(
                                 syntax(raw"""Slider(
                                     text="Embedded Value [\$()]",
-                                    trailing_text="[\$()cm]",
+                                    trailingText="[\$()cm]",
                                     min=0,
                                     max=100,
                                     value=10,
@@ -277,7 +338,7 @@ ui = VContainer(
                             content=VContainer(
                                 syntax(raw"""Slider(
                                     text="Step Size",
-                                    trailing_text="current value is \$()",
+                                    trailingText="current value is \$()",
                                     min=0,
                                     max=1,
                                     value=0.5,
@@ -601,10 +662,10 @@ ui = VContainer(
                 ),
             ),            
 
-            # Checkboxes
+            # Checkboxes and SlideToggle
             ExpansionPanel(
-                title="CheckBox",
-                subtitle="toggler",
+                title="CheckBox and SlideToggle",
+                subtitle="togglers",
                 style=expansion_panel_style,
                 headerStyle=expansion_panel_header_style,
                 subtitleStyle=expansion_panel_subtitle_style,
@@ -627,6 +688,25 @@ ui = VContainer(
                                 CodeSnipJulia("""$(current_module).toggle1[] = true """),
                             ),              
                         ),
+                        Card(
+                            title="Simple SlideToggle",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""SlideToggle(
+                                    text = "Sample Text Before Toggle",
+                                    trailingText = "Sample Text After Toggle",
+                                    color = "primary",
+                                    variable="toggle1",
+                                )""")...,
+                                Label(text="Adding a label to debug the toggle value:"),
+                                syntax("""Label(
+                                    text="Current value of toggle1 is [\\\$(toggle1)]",
+                                )""")...,
+                                Label(text="""You can update the toggle value from the REPL:"""),
+                                CodeSnipJulia("""$(current_module).toggle1[] = true """),
+                            ),              
+                        ),
+
                     ],
                 ),
             ),            
@@ -1015,7 +1095,151 @@ ui = VContainer(
                     ],
                 ),
             ),            
+
+            # Grid
+            ExpansionPanel(
+                title="Grid",
+                subtitle="editing tabular and hierarchical data",
+                style=expansion_panel_style,
+                headerStyle=expansion_panel_header_style,
+                subtitleStyle=expansion_panel_subtitle_style,
+                content=Container(
+                    direction="row warp",
+                    children=[
+                        Card(
+                            title="Simple Grid with a Combobox and Button examples",
+                            style=card_style,
+                            content=VContainer(
+                                AGGrid(
+                                    style="width: 600px; height: 500px;",
+                                    variable="table_var",
+                                ),
+                                Label(variable="table_label"),
+                                
+                                Divider(),
+
+                                Label(text="To see how to define the grid properties please take a look in the example code."),
+                            ),              
+                        ),
+
+                        Card(
+                            title="Grid with Tree/hierarchy support",
+                            style=card_style,
+                            content=VContainer(
+                                AGGrid(
+                                    style="width: 600px; height: 500px;",
+                                    variable="table_var2",
+                                ),
+                                
+                                Divider(),
+
+                                Label(text="To see how to define the grid properties please take a look in the example code."),
+                            ),              
+                        ),
+
+                    ],
+                ),
+            ),            
             
+            # Splitter
+            ExpansionPanel(
+                title="Splitter",
+                subtitle="split views and allow dragging to resize areas",
+                style=expansion_panel_style,
+                headerStyle=expansion_panel_header_style,
+                subtitleStyle=expansion_panel_subtitle_style,
+                content=Container(
+                    direction="row warp",
+                    children=[
+                        Card(
+                            title="Simple example of horizontal and vertical splitters",
+                            style=card_style,
+                            content=VContainer(
+                                syntax("""Splitter(
+                                    units = "percent",
+                                    direction = "horizontal",
+                                    style= "width: 100%; height: 500px;",
+                                    areas = [
+                                        SplitterArea(
+                                            size = "30",
+                                            minSize=10,
+                                            content = VContainer(
+                                                Card(
+                                                    title="Nested Splitters",
+                                                    subtitle="A Card inside a aplitter area containing a vertical splitter",
+                                                    style=card_style,
+                                                    content=VContainer(
+                                                        Splitter(
+                                                            units = "pixel",
+                                                            direction = "vertical",
+                                                            style= "width: 100%; height: 350px;",
+                                                            areas = [
+                                                                SplitterArea(
+                                                                    size = "*",
+                                                                    content = VContainer(
+                                                                        Label(text=loremText),
+                                                                    ),    
+                                                                ),
+                                                                SplitterArea(
+                                                                    size = "100",
+                                                                    minSize=50,
+                                                                    content = VContainer(
+                                                                        Label(text=loremText),
+                                                                    ),    
+                                                                ),
+                                                                SplitterArea(
+                                                                    size = "100",
+                                                                    minSize=50,
+                                                                    content = VContainer(
+                                                                        Label(text=loremText),
+                                                                    ),    
+                                                                ),
+                                                            ],
+                                                        ),
+                                                    ),              
+                                                ),
+                                            ),    
+                                        ),
+                                        SplitterArea(
+                                            size = "40",
+                                            minSize=10,
+                                            content = VContainer(
+                                                Label(text="We are inside a splitter area"),
+                                                Label(text="The value of the checkbox below if [\\\$(toggle1)]"),
+                                                CheckBox(
+                                                    label="Always save before closing",
+                                                    variable="toggle1",
+                                                ),
+                                                HContainer(
+                                                    Button(text = "Button1", color = "primary", buttonType = "raised"),
+                                                    Button(text = "Button2", color = "primary", buttonType = "raised"),
+                                                )
+                                            ),    
+                                        ),
+                                        SplitterArea(
+                                            size = "30",
+                                            minSize=10,
+                                            content = VContainer(
+                                                Label(text="Another splitter area"),
+                                                Slider(
+                                                    text="Value ",
+                                                    trailingText="[\\\$()cm]",
+                                                    min=0, max=100, value=10, variable="range1"
+                                                )                                                
+                                            ),    
+                                        )
+
+                                    ],
+                                )""")...,
+                            ),              
+                        ),
+
+
+                    ],
+                ),
+            ),            
+            
+
         ],
     ),
 

@@ -30,7 +30,7 @@ ui = VContainer(
         content=VContainer(
             Slider(
                 text="Angle (π over value)",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=2,
                 max=16,
                 value=8,
@@ -38,7 +38,7 @@ ui = VContainer(
             ),  
             Slider(
                 text="Count",
-                trailing_text="[\$()]",
+                trailingText="[\$()]",
                 min=1,
                 max=30,
                 value=16,
