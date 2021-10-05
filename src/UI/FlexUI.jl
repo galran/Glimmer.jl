@@ -18,6 +18,10 @@ export  App,
         # viewerUrl, viewerUrl!, 
         renderFunction, renderFunction!,
         addVariable!,
+
+        sendJSMessage,
+        send!,
+
         run
 
 mutable struct App <: AbstractUIApp
@@ -123,6 +127,20 @@ function forceUpdateControls!(app::App)
             window.fireAngularEvent("updateRawHTML", [])
         end
         render!(app)
+    end
+end
+
+
+function sendJSMessage(app::App, type::String, data::Any)
+    if (app === nothing || Glimmer.win(app) === nothing)
+        @warn "sendJSMessage: app or app window is not initialized yes...skipping "
+        return
+    end
+
+    @info "sending data to JS"
+    Blink.@js_ Glimmer.win(app) begin
+        console.log("Ran");
+        window.fireAngularEvent($(type), [$(data)])
     end
 end
 
@@ -244,6 +262,49 @@ end
 function Base.run(app::App)
     prepareApp!(app)
 
+    # this is a hack to change the base reference of the loaded page to be out dist direction.
+    # it is needed for the angular application to be able to load assets correctly.
+    # the problem is that Blink does not expose this in a nice way - so i have do to some horrible things.
+    restore_blink_html = false;
+    saved_blink_html = ""
+    saved_blink_index = 0;
+    for (index, token) in enumerate(Blink.maintp.tokens)
+        str = token.value;
+        pos = findfirst("</head>", str)
+        if (pos !== nothing) 
+            restore_blink_html = true 
+            saved_blink_index = index
+            saved_blink_html = str
+            # slash at the end of the base href is IMPORTANT
+            str = str[1:pos[1]-1] * 
+                    """<base href="$(replace(abspath(getUIFolder()), '\\'=>'/'))/">""" *
+                    """<script src='assets/WGLRenderer/Build/WGLRenderer.loader.js'></script>""" *
+                    str[pos[1]:end]
+            token.value = str
+            # @info "replaced blink html" str
+            break
+        end
+    end
+    # saved_value = Blink.maintp.tokens[5].value
+
+    # <script src='/assets/demo/Build/Build.loader.js'></script>
+    #     <base href="$(replace(abspath(getUIFolder()), '\\'=>'/'))">
+    # <base href="D:/Projects/Rays/Github/Glimmer.jl/src/Data/dist/">
+
+    # slash at the end of the base href is IMPORTANT
+    # Blink.maintp.tokens[5].value = """</script>
+    # <script src=\"blink.js\"></script>    
+    # <link rel=\"stylesheet\" href=\"reset.css\">
+    # <link rel=\"stylesheet\" href=\"blink.css\">
+    # <link rel=\"stylesheet\" href=\"spinner.css\">
+
+    # <base href="$(replace(abspath(getUIFolder()), '\\'=>'/'))/">
+    # <script src='assets/demo/Build/Build.loader.js'></script>
+
+    # </head>\n  <body>\n\n    <!-- Spinner -->\n    <div class=\"vcentre\"><div>\n      <div class=\"sk-spinner sk-spinner-cube-grid\">\n        <div class=\"sk-cube\"></div>\n     
+    # <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n        <div class=\"sk-cube\"></div>\n      </div>\n    </div></div>\n\n  </body>\n</html>\n"""
+
+
     window_defaults = Blink.@d(
         :title => prop(app, :title, "?? app title ??"), 
         :width => prop(app, :winInitWidth, 1600), 
@@ -252,6 +313,7 @@ function Base.run(app::App)
         :webPreferences => Blink.@d(
             :webSecurity => false, 
             :experimentalFeatures => true,
+            :nodeIntegration => true,
         ),
     )
     win =Blink. Window(window_defaults)
@@ -287,6 +349,10 @@ function Base.run(app::App)
     # call the general update function once after initialization
     render!(app)
 
+    if (restore_blink_html)
+        # @info "restored blink html"
+        Blink.maintp.tokens[saved_blink_index].value = saved_blink_html
+    end
 
 end
 
@@ -420,5 +486,32 @@ function render!(app::App)
     end
     app.__insideRender = false;
 end
+
+
+
+# some utility function for communication with WGLRenderer
+function send!(var::AbstractUIVariable, data::Any)
+    if (var.type != "wgl-renderer")
+        @warn "Variable [$(var.name)] is not of type 'wgl-renderer' - oprration is not supported"
+        return;
+    end
+
+    # @info var
+
+    js_data = Dict{Symbol, Any}(
+        :type => "wgl-renderer",
+        :variable => var.name,
+        :data => data,
+    )
+
+    # @info js_data
+
+    sendJSMessage(var._app, "WGLRendererData", js_data);
+    # @info "js data sent"
+    
+end
+
+
+
 
 end # modeule FlexUI

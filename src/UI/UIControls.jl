@@ -37,6 +37,7 @@ export  Container,
 
         Splitter,
         SplitterArea,
+        WGLRenderer,
 
         VContainer,
         HContainer,
@@ -370,5 +371,15 @@ end
 
     _app::Union{Nothing, AbstractUIApp} = nothing
 end
+
+@with_kw mutable struct WGLRenderer <: AbstractUIControl 
+    type::String = "wgl-renderer"
+    id::String = string(UUIDs.uuid1())
+    style::Any = ""
+    variable::Any = nothing
+
+    _app::Union{Nothing, AbstractUIApp} = nothing
+end
+
 
 end # module UIControlsget
