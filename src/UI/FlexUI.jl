@@ -490,7 +490,7 @@ end
 
 
 # some utility function for communication with WGLRenderer
-function send!(var::AbstractUIVariable, data::Any)
+function Glimmer.send!(var::AbstractUIVariable, data::Any)
     if (var.type != "wgl-renderer")
         @warn "Variable [$(var.name)] is not of type 'wgl-renderer' - oprration is not supported"
         return;

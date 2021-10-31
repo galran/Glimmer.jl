@@ -35,6 +35,7 @@ include("Scene.jl")
 include("JSInterface/JuliaJSBridge.jl")
 include("UI/UIVariables.jl")
 include("UI/UIControls.jl")
+include("UI/WGL.jl")
 
 include("UI/FlexUI.jl")
 
@@ -42,6 +43,7 @@ include("UI/FlexUI.jl")
 
 @reexport using ..UIControls
 @reexport using ..UIVariables
+@reexport using ..WGL
 @reexport using ..GridUtils
 
         
@@ -75,7 +77,8 @@ export  Scene,
         zero3,
         cameraTransform!,
         url,
-        clear
+        clear,
+        send!
 
 
 export  BasicValidation, on, Variable
