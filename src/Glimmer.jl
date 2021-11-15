@@ -78,7 +78,11 @@ export  Scene,
         cameraTransform!,
         url,
         clear,
-        send!
+        send!,
+        root, 
+        root_transform,
+        win,
+        vis
 
 
 export  BasicValidation, on, Variable

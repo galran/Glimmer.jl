@@ -153,6 +153,7 @@ end
     buttonType::String = "raised"     # normal, raised, stroked, flat, icon, fab, mini-fab
     color::String = "primary"         # normal, primary, accent, warn, 
     fileTypes::String = ""            # used for an open file dialog, like ".png,.jpg"  
+    dialogOptions::Union{Nothing, Dict} = nothing
 
     _variable_name_to_create::String = ""
     _app::Union{Nothing, AbstractUIApp} = nothing
