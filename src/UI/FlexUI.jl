@@ -130,6 +130,20 @@ function forceUpdateControls!(app::App)
     end
 end
 
+function forceUpdate!(app::App, var_name::String)
+    forceUpdate!(app, var(app, var_name))
+end
+
+function forceUpdate!(app::App, var::AbstractUIVariable)
+    if (app !== nothing && Glimmer.win(app) != nothing)
+        if (var.type == "aggrid")
+            Blink.@js_ Glimmer.win(app) begin
+                window.fireAngularEvent("aggridDefinitionChange", [$(var.name)])
+            end
+        end
+        render!(app)
+    end
+end
 
 function sendJSMessage(app::App, type::String, data::Any)
     if (app === nothing || Glimmer.win(app) === nothing)
@@ -456,7 +470,7 @@ function Glimmer.updateVariable!(app::App, var::UIVariables.AbstractUIVariable)
         data = UIVariables.typedict(var)
         Blink.@js_ Glimmer.win(app) begin
             window.fireAngularEvent("setVariableFromJulia", [$(data)])
-        end
+        end 
 
         render!(app)
     end
