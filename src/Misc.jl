@@ -8,6 +8,11 @@ abstract type AbstractUIVariable end
 abstract type AbstractUIValidation end
 abstract type AbstractUIControl end
 
+abstract type AbstractWGLComponent end
+abstract type AbstractWGLMaterial <: AbstractWGLComponent end
+abstract type AbstractWGLGeometry <: AbstractWGLComponent end
+abstract type AbstractWGLObject <: AbstractWGLComponent end
+
 export  AbstractScene,
         AbstractSceneObject,
         AbstractMaterial,
@@ -15,6 +20,12 @@ export  AbstractScene,
         AbstractUIVariable,
         AbstractUIValidation,
         AbstractUIControl,
+
+        AbstractWGLComponent,
+        AbstractWGLMaterial,
+        AbstractWGLGeometry,
+        AbstractWGLObject,
+
         renderHTML,
         identityTransform, 
         
@@ -29,6 +40,7 @@ controls() = 0
 controls!() = 0
 renderFunction() = 0
 renderFunction!() = 0
+send!() = 0       
 
 function updateVariable!(app::AbstractUIApp, var::AbstractUIVariable)
     @error "abstract function - should not reach here"
@@ -48,6 +60,14 @@ function renderHTML(obj)
     io = IOBuffer()
 	Base.show(io, MIME"text/html"(), obj)
     res = String(take!(io))
+ 
+    return res
+end
+
+function renderPNG(obj)
+    io = IOBuffer()
+	Base.show(io, MIME"image/png"(), obj)
+    res = take!(io)
  
     return res
 end
