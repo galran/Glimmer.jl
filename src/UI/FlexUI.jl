@@ -134,7 +134,7 @@ function forceUpdate!(app::App, var_name::String)
     forceUpdate!(app, var(app, var_name))
 end
 
-function forceUpdate!(app::App, var::AbstractUIVariable)
+function forceUpdate!(app::App, var::UIVariables.AbstractUIVariable)
     if (app !== nothing && Glimmer.win(app) != nothing)
         if (var.type == "aggrid")
             Blink.@js_ Glimmer.win(app) begin

@@ -64,6 +64,14 @@ function renderHTML(obj)
     return res
 end
 
+function renderPNG(obj)
+    io = IOBuffer()
+	Base.show(io, MIME"image/png"(), obj)
+    res = take!(io)
+ 
+    return res
+end
+
 
 # #---------------------------------------------------------------
 # #   Transform to AffineMat that can be used in the renderer
