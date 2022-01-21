@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Overview · Glimmer.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/GlimmerJulia.png" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img class="docs-light-only" src="../assets/logo.png" alt="Glimmer.jl logo"/><img class="docs-dark-only" src="../assets/logo-dark.svg" alt="Glimmer.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit">Glimmer.jl</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Overview</a><ul class="internal"><li><a class="tocitem" href="#Application-Structure"><span>Application Structure</span></a></li><li><a class="tocitem" href="#Example"><span>Example</span></a></li></ul></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../examples/Meshing/">Meshing Example</a></li></ul></li><li><a class="tocitem" href="../ref/">Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Overview</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Overview</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/galran/Glimmer.jl/blob/master/docs/src/overview.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h1><h2 id="Application-Structure"><a class="docs-heading-anchor" href="#Application-Structure">Application Structure</a><a id="Application-Structure-1"></a><a class="docs-heading-anchor-permalink" href="#Application-Structure" title="Permalink"></a></h2><p>A Glimmer application usually contains:</p><ul><li><strong><em>Variables</em></strong> - Each variable contains a unique <strong>name</strong>, a <strong>type</strong>, and a <strong>value</strong>. The value of a variable can be changed on the Julia side or on the UI side (using the UI controls). Each variable can be connected to a function that will be called whenever the value is set, either by the UI or Julia.</li></ul><ul><li><p><strong><em>UI Controls</em></strong> - A tree structure that defines the user interface. This structure can contain UI controls such as labels, fields, sliders, buttons etc., and also some components to help layout the controls in different ways, such as containers, expansion panels, tabs etc.</p></li><li><p><strong><em>Rendering Function</em></strong> - A function that will be called every time any of the application variables value is set. This is a convenient way to take into account all the variables values without connecting each one to a separate event handler.</p></li></ul><h2 id="Example"><a class="docs-heading-anchor" href="#Example">Example</a><a id="Example-1"></a><a class="docs-heading-anchor-permalink" href="#Example" title="Permalink"></a></h2><p>Let&#39;s take a look at the <strong>Images</strong> example in Glimmer package. This example shows how to display an image created using the Images package, and allow the user to manipulate controls that will update the image. You can run the example using:</p><pre><code class="language-julia">julia&gt; Glimmer.runExample(&quot;Images&quot;)</code></pre><p><img src="../assets/SegmentationExample.gif" alt="Glimmer Example"/></p><h3 id="Initilazation"><a class="docs-heading-anchor" href="#Initilazation">Initilazation</a><a id="Initilazation-1"></a><a class="docs-heading-anchor-permalink" href="#Initilazation" title="Permalink"></a></h3><p>Creating an App object and setting general properties such as the application title and initial window size.</p><pre><code class="language-julia">using Glimmer, Glimmer.FlexUI
+using Images, ImageSegmentation
+
+app = App()
+prop!(app, :title, &quot;Glimmer Example - Images&quot;)
+prop!(app, :winInitWidth, 1200)
+prop!(app, :winInitHeight, 800)</code></pre><h3 id="Defining-the-variables"><a class="docs-heading-anchor" href="#Defining-the-variables">Defining the variables</a><a id="Defining-the-variables-1"></a><a class="docs-heading-anchor-permalink" href="#Defining-the-variables" title="Permalink"></a></h3><pre><code class="language-julia"># image file name
+filename = addVariable!(app, Variable(name=&quot;filename&quot;, type=&quot;string&quot;, value=&quot;C:/t/TestImages/horse.jpg&quot;))
+# size of segments
+size = addVariable!(app, Variable(name=&quot;size&quot;, type=&quot;int&quot;, value=10))
+# contains the result of the segmentation 
+details = addVariable!(app, Variable(name=&quot;details&quot;, type=&quot;string&quot;, value=10))
+# source and destination images
+src_image = addVariable!(app, Variable(name=&quot;src_image&quot;, type=&quot;image&quot;, value=&quot;&quot;))
+dst_image = addVariable!(app, Variable(name=&quot;dst_image&quot;, type=&quot;image&quot;, value=&quot;&quot;))</code></pre><h3 id="Defining-the-UI"><a class="docs-heading-anchor" href="#Defining-the-UI">Defining the UI</a><a id="Defining-the-UI-1"></a><a class="docs-heading-anchor-permalink" href="#Defining-the-UI" title="Permalink"></a></h3><pre><code class="language-julia">ui = VContainer(
+    H1Label(&quot;Segmantation Example&quot;),                # Label
+    HContainer(
+        Button(                                     # Load Button
+            text=&quot;Load a file&quot;,
+            fileTypes=&quot;.png,.jpg&quot;,
+            variable=&quot;filename&quot;,
+        ),  
+        Label(text=&quot;Current file [\$(filename)]&quot;),  # Label showing the current file name
+    ),
+    Container(
+        direction = &quot;row warp&quot;,
+        align = &quot;space-between center&quot;,
+        children = [
+            Slider(                                 # Slider to control the segments size
+                text=&quot;Segments Size&quot;,
+                trailing_text=&quot;[\$()]&quot;,             # slider&#39;s label can contain a default 
+                                                    # variable interpolation for its current value $()
+                min=2,
+                max=100,
+                value=8,
+                variable=&quot;size&quot;
+            ),  
+            Label(text=&quot;\$(details)&quot;),              # label showing the segmentation details
+                                                    # using the variable interpolation $(details)
+        ],
+    ),
+    H1Label(&quot;Image Viewer allowing Pan (left-drag) and Zoom (wheel)&quot;),
+    PanZoom(
+        style=&quot;width: 100%; height: 60vh;  border: 1px solid black;&quot;,
+        content = Container(
+            direction = &quot;row&quot;,
+            children = [
+                Card(
+                    title=&quot;Source Image&quot;,
+                    # style=card_style, 
+                    content=VContainer(
+                        Image(                      # Source Image       
+                            source=&quot;\$(src_image)&quot;,
+                        ),        
+                    ),              
+                ),
+                Card(
+                    title=&quot;Segmented Image&quot;,
+                    # style=card_style, 
+                    content=VContainer(
+                        Image(                      # Segmented Image
+                            source=&quot;\$(dst_image)&quot;,
+                        ),        
+                    ),              
+                ),
+            ]
+        ),
+    ),        
+    
+    Glimmer.exampleSourceAsCard(@__FILE__),         # add the source code as the last control
+)
+# set the controls for the application
+controls!(app, ui)</code></pre><h3 id="The-Rendering-Function-and-others"><a class="docs-heading-anchor" href="#The-Rendering-Function-and-others">The Rendering Function and others</a><a id="The-Rendering-Function-and-others-1"></a><a class="docs-heading-anchor-permalink" href="#The-Rendering-Function-and-others" title="Permalink"></a></h3><pre><code class="language-julia"># utility function to load the current image from disk
+function loadImage()
+    @info &quot;Loading Image [$(filename[])]&quot;
+    global src_img = load(filename[])
+    src_image[&quot;png&quot;] = src_img
+end
+
+# define an event that will trigger when the vriable &quot;filename&quot; is changed
+# this function is connected to the variable &quot;filename&quot; we defined above
+on(filename) do val
+    loadImage()
+end
+
+# the render function will be caulled when any of the UI controls changes value
+src_img = nothing           
+function processImages()
+    global src_img
+
+    # performing the segmentation using the variable value size (&quot;size[]&quot;)
+    segments = felzenszwalb(src_img, size[])
+    dst_img = map(i-&gt;segment_mean(segments,i), labels_map(segments))
+    
+    # updating the segmented image and the segmentation details variables
+    dst_image[&quot;png&quot;] = dst_img
+    details[] = &quot;$segments&quot;
+end
+
+# defining the rendering function that will be called every time a variable&#39;s value is updated
+function render()
+    processImages();
+end
+renderFunction!(app, render)</code></pre><h3 id="Running-the-Application"><a class="docs-heading-anchor" href="#Running-the-Application">Running the Application</a><a id="Running-the-Application-1"></a><a class="docs-heading-anchor-permalink" href="#Running-the-Application" title="Permalink"></a></h3><pre><code class="language-julia"># load the initial image and Run the application
+loadImage()
+run(app)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../examples/Meshing/">Meshing Example »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 30 September 2021 16:30">Thursday 30 September 2021</span>. Using Julia version 1.6.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
