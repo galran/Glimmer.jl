@@ -110,6 +110,9 @@ mutable struct EmptySceneObject <: AbstractSceneObject
 end
 
 function render!(e::EmptySceneObject) 
+    v = vis(e)
+
+    MeshCat.settransform!(v, local_tr(e))
 end
 
 #-----------------------------------------------------------------
