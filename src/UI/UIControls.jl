@@ -116,6 +116,7 @@ HContainerSpace(args...) = Container(direction = "row", align="space-between cen
 HContainerFill(args...) = Container(direction = "row", align="space-between center",  children=[args...])
 HContainerSpaceStart(args...) = Container(direction = "row", align="space-between start",  children=[args...])
 HContainerStartStart(args...) = Container(direction = "row", align="start start",  children=[args...])
+HContainerWrap(args...) = Container(direction = "row warp", align="left center",  children=[args...])
 
 """
     Slider Control

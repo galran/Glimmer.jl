@@ -139,7 +139,11 @@ end
 function Base.getindex(var::Variable) 
     if (var.type == "integer" || var.type == "int")
         if (isa(var.value, String))
-            return Int(floor(parse(Float64, var.value)))
+            try
+                return Int(floor(parse(Float64, var.value)))
+            catch
+                return 0.0
+            end
         elseif (isa(var.value, Int64))
             return var.value
         elseif (isa(var.value, Float64))
@@ -149,7 +153,11 @@ function Base.getindex(var::Variable)
         end
     elseif (var.type == "float64")
         if (isa(var.value, String))
-            return parse(Float64, var.value)
+            try
+                return parse(Float64, var.value)
+            catch
+                return 0.0
+            end
         elseif (isa(var.value, Int))
             return convert(Float64, var.value)
         elseif (isa(var.value, Float64))

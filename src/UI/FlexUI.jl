@@ -323,6 +323,8 @@ function Base.run(app::App)
         :title => prop(app, :title, "?? app title ??"), 
         :width => prop(app, :winInitWidth, 1600), 
         :height => prop(app, :winInitHeight, 1200),
+        :x => prop(app, :x, nothing), 
+        :y => prop(app, :x, nothing),
         # this will allow us to load local file which is a security risk
         :webPreferences => Blink.@d(
             :webSecurity => false, 

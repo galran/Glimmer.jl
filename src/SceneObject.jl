@@ -112,6 +112,7 @@ end
 function render!(e::EmptySceneObject) 
     v = vis(e)
 
+    # @info local_tr(e), name(e)
     MeshCat.settransform!(v, local_tr(e))
 end
 
@@ -202,10 +203,19 @@ mesh(m::Mesh) = prop(m, :mesh)
 function render!(m::Mesh) 
     v = vis(m)
     mat = material(m)
-    if (mat !== nothing)
-        MeshCat.setobject!(v, mesh(m), material(mat))
+    the_mesh = mesh(m)
+    
+    vert_colors = prop(m, :vert_colors)
+    if (vert_colors !== nothing)
+        the_mesh = MeshCat.meta(the_mesh, vertexColors=vert_colors)
+        mat = MeshCat.MeshLambertMaterial(vertexColors=true)
+        MeshCat.setobject!(v, the_mesh, mat)
     else
-        MeshCat.setobject!(v, mesh(m))
+        if (mat !== nothing)
+            MeshCat.setobject!(v, the_mesh, material(mat))
+        else
+            MeshCat.setobject!(v, the_mesh)
+        end
     end
 
     MeshCat.settransform!(v, local_tr(m))
@@ -351,5 +361,38 @@ function render!(ls::LineSegments)
     end
     MeshCat.settransform!(v, local_tr(ls))
 end
+
+#-----------------------------------------------------------------
+# Line Segments
+#-----------------------------------------------------------------
+mutable struct PointCloud <: AbstractSceneObject
+    _props::Dict{Symbol, Any}
+
+    function PointCloud(; name="defaultPointCloud", points::Vector{SVector{3, Float64}} = [], kwargs...)
+        props = build_props(; points=points, name=name, kwargs...)
+
+        return new(props)
+    end
+end
+
+points(pc::PointCloud) = prop(pc, :points)
+
+function render!(pc::PointCloud) 
+    v = vis(pc)
+    mat = material(pc)
+
+    pts = points(pc)
+    pts2 = GeometryBasics.Point.(pts)
+
+    if (mat !== nothing)
+        # create a list with the same material
+        colors = repeat([mat._color], length(points(pc)))
+        MeshCat.setobject!(v, MeshCat.PointCloud(GeometryBasics.Point.(points(pc)), colors))
+    else
+        MeshCat.setobject!(v, MeshCat.PointCloud(GeometryBasics.Point.(points(pc))))
+    end
+    MeshCat.settransform!(v, local_tr(pc))
+end
+
 
 #-----------------------------------------------------------------
